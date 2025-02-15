@@ -23,6 +23,9 @@ namespace OBSWebsocketDotNet.Types
         [JsonProperty(PropertyName = "inputKind")]
         public string SourceKind { set; get; }
 
+        [JsonProperty(PropertyName = "sourceUuid")]
+        public Guid SourceId { get; set; }
+
         /// <summary>
         /// Name of the scene item's source
         /// </summary>
@@ -34,6 +37,9 @@ namespace OBSWebsocketDotNet.Types
         /// </summary>
         [JsonProperty(PropertyName = "sourceType")]
         public SceneItemSourceType SourceType { set; get; }
+
+        [JsonProperty("sceneItemTransform")]
+        public SceneItemTransformInfo Transform { get; set; }
 
 
         /// <summary>

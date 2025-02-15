@@ -11,21 +11,21 @@ namespace OBSWebsocketDotNet.Types.Events
         /// Old name of the scene
         /// </summary>
         public string OldSceneName { get; }
-        
+
         /// <summary>
         /// New name of the scene
         /// </summary>
-        public string SceneName { get; }
+        public SceneIdentifier SceneIdentifier { get; }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="oldSceneName">The previous scene name</param>
-        /// <param name="sceneName">The new scene name</param>
-        public SceneNameChangedEventArgs(string oldSceneName, string sceneName)
+        /// <param name="sceneIdentifier">The new scene name</param>
+        public SceneNameChangedEventArgs(string oldSceneName, SceneIdentifier sceneIdentifier)
         {
             OldSceneName = oldSceneName;
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
         }
     }
 }

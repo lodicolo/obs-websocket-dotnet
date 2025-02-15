@@ -10,13 +10,13 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the scene the item is in
         /// </summary>
-        public string SceneName { get; } 
-        
+        public SceneIdentifier SceneIdentifier { get; }
+
         /// <summary>
         /// Numeric ID of the scene item
         /// </summary>
         public int SceneItemId { get; }
-        
+
         /// <summary>
         /// Whether the scene item is enabled (visible)
         /// </summary>
@@ -25,12 +25,12 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="sceneItemId">The scene item id</param>
         /// <param name="sceneItemEnabled">Is the scene item enabled</param>
-        public SceneItemEnableStateChangedEventArgs(string sceneName, int sceneItemId, bool sceneItemEnabled)
+        public SceneItemEnableStateChangedEventArgs(SceneIdentifier sceneIdentifier, int sceneItemId, bool sceneItemEnabled)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             SceneItemId = sceneItemId;
             SceneItemEnabled = sceneItemEnabled;
         }

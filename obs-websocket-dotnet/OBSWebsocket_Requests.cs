@@ -112,7 +112,7 @@ namespace OBSWebsocketDotNet
                     { "shift", (keyModifier & KeyModifier.Shift) == KeyModifier.Shift },
                     { "alt", (keyModifier & KeyModifier.Alt) == KeyModifier.Alt },
                     { "control", (keyModifier & KeyModifier.Control) == KeyModifier.Control },
-                    { "command", (keyModifier & KeyModifier.Command) == KeyModifier.Command } } 
+                    { "command", (keyModifier & KeyModifier.Command) == KeyModifier.Command } }
                 }
             };
 
@@ -120,13 +120,20 @@ namespace OBSWebsocketDotNet
         }
 
         /// <summary>
-        /// Get the name of the currently active scene. 
+        /// Get the name of the currently active scene.
         /// </summary>
         /// <returns>Name of the current scene</returns>
-        public string GetCurrentProgramScene()
+        public SceneIdentifier GetCurrentProgramScene()
         {
-            JObject response = SendRequest(nameof(GetCurrentProgramScene));
-            return (string)response["currentProgramSceneName"];
+            try
+            {
+                var response = SendRequest(nameof(GetCurrentProgramScene));
+                return response.ToObject<SceneIdentifier>();
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
         /// <summary>
@@ -752,14 +759,27 @@ namespace OBSWebsocketDotNet
         }
 
         /// <summary>
-        /// Get the name of the currently selected preview scene. 
+        /// Get the name of the currently selected preview scene.
         /// Note: Triggers an error if Studio Mode is disabled
         /// </summary>
         /// <returns>Preview scene name</returns>
-        public string GetCurrentPreviewScene()
+        public SceneIdentifier GetCurrentPreviewScene()
         {
-            var response = SendRequest(nameof(GetCurrentPreviewScene));
-            return (string)response["currentPreviewSceneName"];
+            try
+            {
+                var response = SendRequest(nameof(GetCurrentPreviewScene));
+                return response.ToObject<SceneIdentifier>();
+            }
+            catch (ErrorResponseException errorResponseException)
+            {
+                // 506 == StudioModeNotActive
+                if (errorResponseException.ErrorCode == 506)
+                {
+                    return default;
+                }
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -776,6 +796,32 @@ namespace OBSWebsocketDotNet
 
             SendRequest(nameof(SetCurrentPreviewScene), requestFields);
         }
+
+        public void SetCurrentPreviewScene(Guid sceneUuid)
+        {
+            var requestFields = new JObject
+            {
+                { nameof(sceneUuid), sceneUuid }
+            };
+
+            SendRequest(nameof(SetCurrentPreviewScene), requestFields);
+        }
+
+        public void SetCurrentPreviewScene(SceneIdentifier sceneIdentifier) =>
+            SetCurrentPreviewScene(sceneIdentifier.Id);
+
+        public void SetCurrentProgramScene(Guid sceneUuid)
+        {
+            var requestFields = new JObject
+            {
+                { nameof(sceneUuid), sceneUuid }
+            };
+
+            SendRequest(nameof(SetCurrentProgramScene), requestFields);
+        }
+
+        public void SetCurrentProgramScene(SceneIdentifier sceneIdentifier) =>
+            SetCurrentProgramScene(sceneIdentifier.Id);
 
         /// <summary>
         /// Change the currently active preview/studio scene to the one specified.
@@ -1103,17 +1149,48 @@ namespace OBSWebsocketDotNet
         /// <returns>Array of scene items in the scene</returns>
         public List<SceneItemDetails> GetSceneItemList(string sceneName)
         {
-            JObject request = null;
-            if (!string.IsNullOrEmpty(sceneName))
+            if (string.IsNullOrEmpty(sceneName))
             {
-                request = new JObject
-                {
-                    { nameof(sceneName), sceneName }
-                };
+                return [];
             }
 
+            JObject request = new()
+            {
+                { nameof(sceneName), sceneName }
+            };
+
             var response = SendRequest(nameof(GetSceneItemList), request);
-            return response["sceneItems"].Select(m => new SceneItemDetails((JObject)m)).ToList();
+            if (!response.TryGetValue("sceneItems", out var tokenSceneItems))
+            {
+                return [];
+            }
+
+            return tokenSceneItems.ToObject<SceneItemDetails[]>()?.ToList() ?? [];
+        }
+
+        public List<SceneItemDetails> GetSceneItemList(SceneIdentifier sceneIdentifier) =>
+            GetSceneItemList(sceneIdentifier.Id);
+
+        public List<SceneItemDetails> GetSceneItemList(Guid sceneUuid)
+        {
+            if (sceneUuid == default)
+            {
+                return [];
+            }
+
+            JObject request = new()
+            {
+                { nameof(sceneUuid), sceneUuid }
+            };
+
+            var response = SendRequest(nameof(GetSceneItemList), request);
+            if (!response.TryGetValue("sceneItems", out var tokenSceneItems))
+            {
+                return [];
+            }
+
+            var sceneItems = tokenSceneItems.ToObject<List<SceneItemDetails>>();
+            return sceneItems ?? [];
         }
 
         /// <summary>
@@ -1191,7 +1268,7 @@ namespace OBSWebsocketDotNet
         public void SetInputAudioTracks(string inputName, SourceTracks inputAudioTracks)
         {
             SetInputAudioTracks(inputName, JObject.FromObject(inputAudioTracks));
-        }       
+        }
 
         /// <summary>
         /// Gets the active and show state of a source.
@@ -1571,6 +1648,18 @@ namespace OBSWebsocketDotNet
             return new InputSettings(response);
         }
 
+        public InputSettings? GetInputSettings(Guid inputUuid)
+        {
+            var request = new JObject
+            {
+                { nameof(inputUuid), inputUuid }
+            };
+
+            var response = SendRequest(nameof(GetInputSettings), request);
+            response.Merge(request);
+            return response.ToObject<InputSettings>();
+        }
+
         /// <summary>
         /// Sets the settings of an input.
         /// </summary>
@@ -1578,7 +1667,26 @@ namespace OBSWebsocketDotNet
         /// <param name="overlay">True == apply the settings on top of existing ones, False == reset the input to its defaults, then apply settings.</param>
         public void SetInputSettings(InputSettings inputSettings, bool overlay = true)
         {
-            SetInputSettings(inputSettings.InputName, inputSettings.Settings, overlay);
+            if (inputSettings.InputId != default)
+            {
+                SetInputSettings(inputSettings.InputId, inputSettings.Settings, overlay);
+            }
+            else
+            {
+                SetInputSettings(inputSettings.InputName, inputSettings.Settings, overlay);
+            }
+        }
+
+        public void SetInputSettings(Guid inputUuid, JObject inputSettings, bool overlay = true)
+        {
+            var request = new JObject
+            {
+                { nameof(inputUuid), inputUuid },
+                { nameof(inputSettings), inputSettings },
+                { nameof(overlay), overlay }
+            };
+
+            SendRequest(nameof(SetInputSettings), request);
         }
 
         /// <summary>

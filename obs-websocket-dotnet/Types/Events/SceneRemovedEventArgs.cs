@@ -10,8 +10,8 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the removed scene
         /// </summary>
-        public string SceneName { get; }
-        
+        public SceneIdentifier SceneIdentifier { get; }
+
         /// <summary>
         /// Whether the removed scene was a group
         /// </summary>
@@ -20,11 +20,11 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="isGroup">Is the scene name a group</param>
-        public SceneRemovedEventArgs(string sceneName, bool isGroup)
+        public SceneRemovedEventArgs(SceneIdentifier sceneIdentifier, bool isGroup)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             IsGroup = isGroup;
         }
     }

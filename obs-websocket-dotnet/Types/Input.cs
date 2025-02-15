@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace OBSWebsocketDotNet.Types
@@ -12,13 +13,16 @@ namespace OBSWebsocketDotNet.Types
         /// Name of the Input
         /// </summary>
         [JsonProperty(PropertyName = "inputName")]
-        public string InputName { get; set; }
+        public string? InputName { get; set; }
+
+        [JsonProperty(PropertyName = "inputUuid")]
+        public Guid InputId { get; set; }
 
         /// <summary>
         /// Kind of the Input
         /// </summary>
         [JsonProperty(PropertyName = "inputKind")]
-        public string InputKind { get; set; }
+        public string? InputKind { get; set; }
 
         /// <summary>
         /// Instantiate object from response data

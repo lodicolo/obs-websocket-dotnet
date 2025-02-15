@@ -10,8 +10,8 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the new scene
         /// </summary>
-        public string SceneName { get; }
-        
+        public SceneIdentifier SceneIdentifier { get; }
+
         /// <summary>
         /// Whether the new scene is a group
         /// </summary>
@@ -20,11 +20,11 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="isGroup">Is the scene item a group</param>
-        public SceneCreatedEventArgs(string sceneName, bool isGroup)
+        public SceneCreatedEventArgs(SceneIdentifier sceneIdentifier, bool isGroup)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             IsGroup = isGroup;
         }
     }

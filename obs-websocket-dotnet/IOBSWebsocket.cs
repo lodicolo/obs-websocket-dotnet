@@ -74,10 +74,10 @@ namespace OBSWebsocketDotNet
         void TriggerHotkeyByKeySequence(OBSHotkey keyId, KeyModifier keyModifier = KeyModifier.None);
 
         /// <summary>
-        /// Get the name of the currently active scene. 
+        /// Get the name of the currently active scene.
         /// </summary>
         /// <returns>Name of the current scene</returns>
-        string GetCurrentProgramScene();
+        SceneIdentifier GetCurrentProgramScene();
 
         /// <summary>
         /// Set the current scene to the specified one
@@ -380,11 +380,11 @@ namespace OBSWebsocketDotNet
         void SetStudioModeEnabled(bool studioModeEnabled);
 
         /// <summary>
-        /// Get the name of the currently selected preview scene. 
+        /// Get the name of the currently selected preview scene.
         /// Note: Triggers an error if Studio Mode is disabled
         /// </summary>
         /// <returns>Preview scene name</returns>
-        string GetCurrentPreviewScene();
+        SceneIdentifier GetCurrentPreviewScene();
 
         /// <summary>
         /// Change the currently active preview/studio scene to the one specified.

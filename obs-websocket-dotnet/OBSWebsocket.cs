@@ -47,7 +47,7 @@ namespace OBSWebsocketDotNet
                 }
             }
         }
-      
+
         /// <summary>
         /// Current connection state
         /// </summary>
@@ -65,6 +65,32 @@ namespace OBSWebsocketDotNet
         public OBSWebsocket()
         {
             responseHandlers = new ConcurrentDictionary<string, TaskCompletionSource<JObject>>();
+            StudioModeStateChanged += (_, args) =>
+            {
+                _studioModeEnabled = args.StudioModeEnabled;
+                _currentPreviewScene = _studioModeEnabled ? GetCurrentPreviewScene() : default;
+            };
+            CurrentPreviewSceneChanged += (_, args) => _currentPreviewScene = args.SceneIdentifier;
+            CurrentProgramSceneChanged += (_, args) => _currentProgramScene = args.SceneIdentifier;
+            SceneNameChanged += (_, args) =>
+            {
+                if (args.SceneIdentifier.Id == _currentPreviewScene.Id)
+                {
+                    _currentPreviewScene = args.SceneIdentifier;
+                }
+
+                if (args.SceneIdentifier.Id == _currentProgramScene.Id)
+                {
+                    _currentProgramScene = args.SceneIdentifier;
+                }
+            };
+
+            Connected += (_, _) =>
+            {
+                _studioModeEnabled = GetStudioModeEnabled();
+                _currentProgramScene = GetCurrentProgramScene();
+                _currentPreviewScene = _currentPreviewScene = _studioModeEnabled ? GetCurrentPreviewScene() : default;
+            };
         }
 
         /// <summary>
@@ -238,7 +264,7 @@ namespace OBSWebsocketDotNet
                 }
                 // Message id already exists, retry with a new one.
             } while (true);
-            // Send the message 
+            // Send the message
             wsConnection.Send(message.ToString());
             if (!waitForReply)
             {

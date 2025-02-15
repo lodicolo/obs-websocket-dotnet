@@ -8,17 +8,17 @@ namespace OBSWebsocketDotNet.Types.Events
     public class CurrentPreviewSceneChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Name of the scene that was switched to
+        /// Identifier of the scene that was switched to
         /// </summary>
-        public string SceneName { get; }
+        public SceneIdentifier SceneIdentifier { get; }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
-        public CurrentPreviewSceneChangedEventArgs(string sceneName)
+        /// <param name="sceneIdentifier">The scene identifier</param>
+        public CurrentPreviewSceneChangedEventArgs(SceneIdentifier sceneIdentifier)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
         }
     }
 }

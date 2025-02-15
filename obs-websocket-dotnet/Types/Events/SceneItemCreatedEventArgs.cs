@@ -10,18 +10,18 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the scene where the item is
         /// </summary>
-        public string SceneName { get; } 
-        
+        public SceneIdentifier SceneIdentifier { get; }
+
         /// <summary>
         /// Name of the concerned item
         /// </summary>
         public string SourceName { get; }
-        
+
         /// <summary>
         /// Numeric ID of the scene item
         /// </summary>
-        public int SceneItemId { get; } 
-        
+        public int SceneItemId { get; }
+
         /// <summary>
         /// Index position of the item
         /// </summary>
@@ -30,13 +30,13 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="sourceName">The source name</param>
         /// <param name="sceneItemId">The scene item id</param>
         /// <param name="sceneItemIndex">The scene item index</param>
-        public SceneItemCreatedEventArgs(string sceneName, string sourceName, int sceneItemId, int sceneItemIndex)
+        public SceneItemCreatedEventArgs(SceneIdentifier sceneIdentifier, string sourceName, int sceneItemId, int sceneItemIndex)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             SourceName = sourceName;
             SceneItemId = sceneItemId;
             SceneItemIndex = sceneItemIndex;

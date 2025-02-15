@@ -8,17 +8,17 @@ namespace OBSWebsocketDotNet.Types.Events
     public class ProgramSceneChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// The new scene name
+        /// The new scene identifier
         /// </summary>
-        public string SceneName { get; }
+        public SceneIdentifier SceneIdentifier { get; }
 
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
-        public ProgramSceneChangedEventArgs(string sceneName)
+        /// <param name="sceneIdentifier">The scene identifier</param>
+        public ProgramSceneChangedEventArgs(SceneIdentifier sceneIdentifier)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
         }
     }
 }

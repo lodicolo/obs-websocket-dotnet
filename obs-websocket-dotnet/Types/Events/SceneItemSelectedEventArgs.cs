@@ -10,8 +10,8 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the scene item is in
         /// </summary>
-        public string SceneName { get; }
-        
+        public SceneIdentifier SceneIdentifier { get; }
+
         /// <summary>
         /// Numeric ID of the scene item
         /// </summary>
@@ -20,11 +20,11 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="sceneItemId">The scene item id</param>
-        public SceneItemSelectedEventArgs(string sceneName, string sceneItemId)
+        public SceneItemSelectedEventArgs(SceneIdentifier sceneIdentifier, string sceneItemId)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             SceneItemId = sceneItemId;
         }
     }

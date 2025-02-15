@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AssemblyName>obs-websocket-dotnet</AssemblyName>
 		<RootNamespace>OBSWebsocketDotNet</RootNamespace>
 		<Copyright>Copyright © BarRaider 2022</Copyright>
-		<LangVersion>8</LangVersion>
+		<LangVersion>default</LangVersion>
 		<Version>5.0.0.3</Version>
 		<Authors>BarRaider</Authors>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -25,6 +25,7 @@ What's new in v5.0.0.3
 * Connect() function is now obsolete, use ConnectAsync() instead.
 * Additional bugfixes and stability fixes
 </PackageReleaseNotes>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

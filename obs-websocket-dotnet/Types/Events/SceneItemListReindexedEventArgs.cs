@@ -12,7 +12,7 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Name of the scene where items where reordered
         /// </summary>
-        public string SceneName { get; } 
+        public SceneIdentifier SceneIdentifier { get; }
 
         /// <summary>
         /// List of all scene items as JObject
@@ -22,11 +22,11 @@ namespace OBSWebsocketDotNet.Types.Events
         /// <summary>
         /// Default Constructor
         /// </summary>
-        /// <param name="sceneName">The scene name</param>
+        /// <param name="sceneIdentifier">The scene name</param>
         /// <param name="sceneItems">The scene item data as a colleciton of JObjects</param>
-        public SceneItemListReindexedEventArgs(string sceneName, List<JObject> sceneItems)
+        public SceneItemListReindexedEventArgs(SceneIdentifier sceneIdentifier, List<JObject> sceneItems)
         {
-            SceneName = sceneName;
+            SceneIdentifier = sceneIdentifier;
             SceneItems = sceneItems;
         }
     }
